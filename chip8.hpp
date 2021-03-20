@@ -1,7 +1,10 @@
 #include <cstdint>
+#include <chrono>
+#include <random>
 
 class Chip8{
     public:
+        
         uint8_t registers[16]{};
         uint8_t memory[4096]{};
         uint16_t index{};
