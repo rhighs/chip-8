@@ -26,9 +26,6 @@ uint8_t fontset[FONTSET_SIZE] =
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-std::default_random_engine rand_gen;
-std::uniform_int_distribution<uint8_t> rand_byte;
-
 Chip8::Chip8() : rand_gen(std::chrono::system_clock::now().time_since_epoch().count()){
     pc = START_ADDR;
 
@@ -39,23 +36,23 @@ Chip8::Chip8() : rand_gen(std::chrono::system_clock::now().time_since_epoch().co
 }
 
 void Chip8::load_rom(char const* filename){
-    std::ifstream file(filename, std::ios::binary, std::ios::ate);
+    std::ifstream file(filename, std::ios::binary | std::ios::ate);
 
     if(!file.is_open()) return;
 
-        //allocates a buffer to held the rom
-        std::streampos size = file.tellg();
-        char* buffer = new char[size];
+    //allocates a buffer to held the rom
+    std::streampos size = file.tellg();
+    char* buffer = new char[size];
 
-        //reads and saves to buffer
-        file.seekg(0, ios::beg);
-        file.read(buffer, size);
+    //reads and saves to buffer
+    file.seekg(0, std::ios::beg);
+    file.read(buffer, size);
 
-        for(long i = 0; i < size; ++i)
-            memory[START_ADDR + i] = buffer[i];
+    for(long i = 0; i < size; ++i)
+        memory[START_ADDR + i] = buffer[i];
 
-        //unalloc buffer
-        delete[] buffer;
+    //unalloc buffer
+    delete[] buffer;
 }
 
 //cls opcode reset video
@@ -72,6 +69,6 @@ void Chip8::op_00EE(){
 //jump to adress
 void Chip8::op_1nnn(){
     uint16_t address = opcode & 0x0FFFu;
-    
+
     pc = address;
 }
