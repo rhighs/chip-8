@@ -62,3 +62,16 @@ void Chip8::load_rom(char const* filename){
 void Chip8::op_00E0(){
     memset(video, 0, sizeof(video));
 }
+
+//RET return from a function
+void Chip8::op_00EE(){
+    --sp;
+    pc = stack[sp];
+}
+
+//jump to adress
+void Chip8::op_1nnn(){
+    uint16_t address = opcode & 0x0FFFu;
+    
+    pc = address;
+}
