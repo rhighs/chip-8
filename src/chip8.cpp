@@ -92,3 +92,25 @@ void Chip8::op_2nnn(){
     
     pc = address;
 }
+
+/*
+    skip next instruction if value at register[x] is equal to the rr byte given 
+
+*/
+void Chip8::op_3xrr(){
+    uint8_t x = (opcode & 0x0F00u) >> 8u;
+    uint8_t byte = opcode & 0x0FFu;
+
+    if(registers[x] == byte)
+        pc += 2;
+}
+
+/*skip next instruction if the value at registers[x] differs from rr*/
+
+void Chip8::op_4xrr(){
+    uint8_t x = (opcode & 0x0F00u) >> 8u;
+    uint8_t byte = (opcode & 0x00FFu); 
+
+    if(registers[x] != byte)
+        pc+=2;
+}
