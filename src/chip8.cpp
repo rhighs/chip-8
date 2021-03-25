@@ -1,4 +1,4 @@
-#include "chip8.hpp"
+#include "../include/chip8.hpp"
 #include <fstream>
 
 const unsigned int START_ADDR = 0x200;
