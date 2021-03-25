@@ -35,6 +35,18 @@ Chip8::Chip8() : rand_gen(std::chrono::system_clock::now().time_since_epoch().co
     rand_byte = std::uniform_int_distribution<uint8_t>(0, 255u);
 }
 
+uint8_t right_most_byte(){
+    return (opcode & 0x00FFu); 
+}
+
+uint8_t x(){
+    return (opcode & 0x0F00u) >> 8u;
+}
+
+uint8_t y(){
+    return (opcode & 0x00F0u) >> 8u;
+}
+
 void Chip8::load_rom(char const* filename){
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
 
@@ -98,19 +110,38 @@ void Chip8::op_2nnn(){
 
 */
 void Chip8::op_3xrr(){
-    uint8_t x = (opcode & 0x0F00u) >> 8u;
-    uint8_t byte = opcode & 0x0FFu;
 
-    if(registers[x] == byte)
+    if(registers[x()] == right_most_byte())
         pc += 2;
 }
 
 /*skip next instruction if the value at registers[x] differs from rr*/
 
 void Chip8::op_4xrr(){
-    uint8_t x = (opcode & 0x0F00u) >> 8u;
-    uint8_t byte = (opcode & 0x00FFu); 
 
-    if(registers[x] != byte)
+    if(registers[x()] != right_most_byte())
         pc+=2;
+}
+
+void Chip8::op_5xy0(){
+    if(registers[x()] == registers[y()])
+        pc+=2;
+}
+
+void Chip8::op_6xrr(){
+    registers[x()] = right_most_byte();
+}
+
+void Chip8::op_7xrr(){
+    registers[x()] += right_most_byte();
+}
+
+void Chip8::op_8xy0(){
+    registers[y()] = registers[x()]; 
+}
+
+void Chip8::op_8xy1(){
+    uint8_t x = x();
+
+    registers[x] = registers[y()] || registers[x];
 }
