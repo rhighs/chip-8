@@ -35,7 +35,7 @@ Chip8::Chip8() : rand_gen(std::chrono::system_clock::now().time_since_epoch().co
     rand_byte = std::uniform_int_distribution<uint8_t>(0, 255u);
 }
 
-uint8_t right_most_byte(){
+uint8_t rightmost_byte(){
     return (opcode & 0x00FFu); 
 }
 
@@ -52,19 +52,12 @@ void Chip8::load_rom(char const* filename){
 
     if(!file.is_open()) return;
 
-    //allocates a buffer to held the rom
     std::streampos size = file.tellg();
-    char* buffer = new char[size];
+    char* buffer = (char *)&(memory[START_ADDR + 1]);
 
     //reads and saves to buffer
     file.seekg(0, std::ios::beg);
     file.read(buffer, size);
-
-    for(long i = 0; i < size; ++i)
-        memory[START_ADDR + i] = buffer[i];
-
-    //unalloc buffer
-    delete[] buffer;
 }
 
 /*
@@ -111,7 +104,7 @@ void Chip8::op_2nnn(){
 */
 void Chip8::op_3xrr(){
 
-    if(registers[x()] == right_most_byte())
+    if(registers[x()] == rightmost_byte())
         pc += 2;
 }
 
@@ -119,7 +112,7 @@ void Chip8::op_3xrr(){
 
 void Chip8::op_4xrr(){
 
-    if(registers[x()] != right_most_byte())
+    if(registers[x()] != rightmost_byte())
         pc+=2;
 }
 
@@ -129,11 +122,11 @@ void Chip8::op_5xy0(){
 }
 
 void Chip8::op_6xrr(){
-    registers[x()] = right_most_byte();
+    registers[x()] = rightmost_byte();
 }
 
 void Chip8::op_7xrr(){
-    registers[x()] += right_most_byte();
+    registers[x()] += rightmost_byte();
 }
 
 void Chip8::op_8xy0(){
