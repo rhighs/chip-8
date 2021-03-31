@@ -33,6 +33,26 @@ Chip8::Chip8() : rand_gen(std::chrono::system_clock::now().time_since_epoch().co
         memory[FONTSET_START_ADDR + i] = fontset[i];
 
     rand_byte = std::uniform_int_distribution<uint8_t>(0, 255u);
+
+    //setting up a fun pointers table as suggezted in tha guide
+    tab[0x1] = &Chip8::op_1nnn;
+    tab[0x2] = &Chip8::op_2nnn;
+    tab[0x3] = &Chip8::op_3xrr;
+    tab[0x4] = &Chip8::op_4xrr;
+    tab[0x5] = &Chip8::op_5xy0;
+    tab[0x6] = &Chip8::op_6xrr;
+    tab[0x7] = &Chip8::op_7xrr;
+    tab[0x9] = &Chip8::op_9xy0;
+    tab[0xA] = &Chip8::op_Annn;
+    tab[0xB] = &Chip8::op_Bnnn;
+    tab[0xC] = &Chip8::op_Cxkk;
+    tab[0xD] = &Chip8::op_Dxyn;
+
+    //funs to other nested tables
+    tab[0x0] = &Chip8::get_tab0;
+    tab[0x8] = &Chip8::get_tab8;
+    tab[0xE] = &Chip8::get_tabE;
+    tab[0xF] = &Chip8::get_tabF;
 }
 
 uint8_t rightmost_byte(){
@@ -63,7 +83,7 @@ void Chip8::load_rom(char const* filename){
 /*
    in order to get the address in which the opcode operates,
    we need to do AND it with 0x0FFF pretty obvious...
-   */
+*/
 
 //cls opcode reset video
 void Chip8::op_00E0(){
@@ -326,10 +346,10 @@ void Chip8::op_Fx33(){
 
     memory[index + 2] = value % 10;
     value /= 10;
-    
+
     memory[index + 1] = value % 10;
     value /= 10;
-    
+
     memory[index] = value % 10;
 }
 
