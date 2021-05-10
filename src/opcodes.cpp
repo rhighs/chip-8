@@ -1,14 +1,14 @@
 #include "../include/chip8.hpp"
 
-uint8_t rightmost_byte(){
+uint8_t Chip8::rightmost_byte(){
     return (opcode & 0x00FFu); 
 }
 
-uint8_t _x(){
+uint8_t Chip8::x(){
     return (opcode & 0x0F00u) >> 8u;
 }
 
-uint8_t _y(){
+uint8_t Chip8::y(){
     return (opcode & 0x00F0u) >> 8u;
 }
 
@@ -136,7 +136,7 @@ void Chip8::op_8xy5(){
 void Chip8::op_8x06(){
     uint8_t _x = x();
 
-    register[0xF] = register[x] & 0x1u;
+    registers[0xF] = registers[x] & 0x1u;
 
     registers[_x] >>= 1u;
 }
@@ -187,7 +187,7 @@ void Chip8::op_Bnnn(){
 }
 
 void Chip8::op_Cxrr(){
-    registers[x()] = randByte(randGen) & rightmost_byte();
+    registers[x()] = rand_byte(rand_gen) & rightmost_byte();
 }
 
 void Chip8::op_Dxyn(){
@@ -198,7 +198,7 @@ void Chip8::op_Dxyn(){
 
     auto xpos = registers[_x] % VIDEO_WIDTH;
     auto ypos = registers[_y] % VIDEO_HEIGHT;
-    register[0xF] = 0;
+    registers[0xF] = 0;
 
     for(uint8_t row = 0; row < height; ++row){
         uint8_t sprite_byte = memory[index + row];
@@ -236,12 +236,12 @@ void Chip8::op_Exa1(){
 }
 
 void Chip8::op_Fx07(){
-    registers[x()] = delayTimer;
+    registers[x()] = delay_timer;
 }
 
 //wait for a key to be pressed
 void Chip8::op_Fx0a(){
-    for(uint8_t = 0; i < 16; ++i){
+    for(uint8_t i = 0; i < 16; ++i){
         if(keypad[i]){
             registers[x()] = i;
             return;
@@ -252,11 +252,11 @@ void Chip8::op_Fx0a(){
 }
 
 void Chip8::op_Fx15(){
-    delayTimer = registers[x()];
+    delay_timer = registers[x()];
 }
 
 void Chip8::op_Fx18(){
-    soundTimer = registers[x()];
+    sound_timer = registers[x()];
 }
 
 void Chip8::op_Fx1e(){
@@ -282,7 +282,7 @@ void Chip8::op_Fx33(){
 
 void Chip8::op_Fx55(){
     for(uint8_t i = 0; i < x(); ++i)
-        memory[index + 1] = registers[i]
+        memory[index + 1] = registers[i];
 }
 
 void Chip8::op_Fx65(){
