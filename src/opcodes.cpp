@@ -4,11 +4,11 @@ uint8_t rightmost_byte(){
     return (opcode & 0x00FFu); 
 }
 
-uint8_t x(){
+uint8_t _x(){
     return (opcode & 0x0F00u) >> 8u;
 }
 
-uint8_t y(){
+uint8_t _y(){
     return (opcode & 0x00F0u) >> 8u;
 }
 
@@ -55,7 +55,7 @@ void Chip8::op_3xrr(){
         pc += 2;
 }
 
-/*skip next instruction if the value at registers[x] differs from rr*/
+/*skip next instruction if the value at registers[_x] differs from rr*/
 
 void Chip8::op_4xrr(){
 
@@ -81,29 +81,29 @@ void Chip8::op_8xy0(){
 }
 
 void Chip8::op_8xy1(){
-    uint8_t x = x();
+    uint8_t _x = x();
 
-    registers[x] = registers[y()] || registers[x];
+    registers[_x] = registers[y()] || registers[_x];
 }
 
 void Chip8::op_8xy2(){
-    uint8_t x = x();
+    uint8_t _x = x();
 
-    registers[x] = registers[y()] & registers[x];
+    registers[_x] = registers[y()] & registers[_x];
 }
 
 void Chip8::op_8xy3(){
-    uint8_t x = x();
+    uint8_t _x = x();
 
-    registers[x] = registers[y()] ^ registers[x];
+    registers[_x] = registers[y()] ^ registers[_x];
 }
 
 void Chip8::op_8xy4()
 {
-    uint8_t x = x();
-    uint8_t y = y();
+    uint8_t _x = x();
+    uint8_t _y = y();
 
-    uint16_t sum = registers[x] + registers[y];
+    uint16_t sum = registers[_x] + registers[_y];
 
     if (sum > 255U)
     {
@@ -114,14 +114,14 @@ void Chip8::op_8xy4()
         registers[0xF] = 0;
     }
 
-    registers[x] = sum & 0xFFu;
+    registers[_x] = sum & 0xFFu;
 }
 
 void Chip8::op_8xy5(){
-    uint8_t x = x();
-    uint8_t y = y();
+    uint8_t _x = x();
+    uint8_t _y = y();
 
-    if (registers[x] > registers[y])
+    if (registers[_x] > registers[_y])
     {
         registers[0xF] = 1;
     }
@@ -130,22 +130,22 @@ void Chip8::op_8xy5(){
         registers[0xF] = 0;
     }
 
-    registers[x] -= registers[y];
+    registers[_x] -= registers[_y];
 }
 
 void Chip8::op_8x06(){
-    uint8_t x = x();
+    uint8_t _x = x();
 
     register[0xF] = register[x] & 0x1u;
 
-    registers[x] >>= 1u;
+    registers[_x] >>= 1u;
 }
 
 void Chip8::op_8xy7(){
-    uint8_t x = x();
-    uint8_t y = y();
+    uint8_t _x = x();
+    uint8_t _y = y();
 
-    if (registers[y] > registers[x])
+    if (registers[_y] > registers[_x])
     {
         registers[0xF] = 1;
     }
@@ -154,22 +154,22 @@ void Chip8::op_8xy7(){
         registers[0xF] = 0;
     }
 
-    registers[x] = registers[y] - registers[x];
+    registers[_x] = registers[_y] - registers[_x];
 }
 
 void Chip8::op_8xyE(){
-    uint8_t x = x();
-    uint8_t y = y();
+    uint8_t _x = x();
+    uint8_t _y = y();
 
-    registers[0xF] = registers[x] & 128u >> 7u;
-    registers[x] <<= 1;
+    registers[0xF] = registers[_x] & 128u >> 7u;
+    registers[_x] <<= 1;
 }
 
 void Chip8::op_9xy0(){
-    uint8_t x = x();
-    uint8_t y = y();
+    uint8_t _x = x();
+    uint8_t _y = y();
 
-    if(registers[x] != registers[y]){
+    if(registers[_x] != registers[_y]){
         pc += 2;
     }
 }
@@ -191,13 +191,13 @@ void Chip8::op_Cxrr(){
 }
 
 void Chip8::op_Dxyn(){
-    uint8_t x = x();
-    uint8_t y = y();
+    uint8_t _x = x();
+    uint8_t _y = y();
 
     uint8_t height = opcode & 0x000Fu;
 
-    auto xpos = registers[x] % VIDEO_WIDTH;
-    auto ypos = registers[y] % VIDEO_HEIGHT;
+    auto xpos = registers[_x] % VIDEO_WIDTH;
+    auto ypos = registers[_y] % VIDEO_HEIGHT;
     register[0xF] = 0;
 
     for(uint8_t row = 0; row < height; ++row){

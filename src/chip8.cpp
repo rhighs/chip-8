@@ -38,7 +38,6 @@ Chip8::Chip8() : rand_gen(std::chrono::system_clock::now().time_since_epoch().co
 
 }
 
-
 void Chip8::load_rom(char const* filename){
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
 
