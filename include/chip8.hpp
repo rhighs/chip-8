@@ -21,6 +21,10 @@ class Chip8{
         uint8_t keypad[16]{};
         void init_funtables();
 
+        typedef void (Chip8::*funptr)();
+
+        funptr tab[100];
+
         /*each value is either set to 1 or 0*/
         uint32_t video[64 * 32]{};
         uint16_t opcode;
