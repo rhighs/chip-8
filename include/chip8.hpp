@@ -5,7 +5,7 @@
 #include <string.h>
 
 class Chip8{
-    public:
+public:
         std::default_random_engine rand_gen;
         std::uniform_int_distribution<uint8_t> rand_byte;
 
@@ -20,22 +20,26 @@ class Chip8{
         uint8_t sound_timer{};
         uint8_t keypad[16]{};
         void init_funtables();
+        const int VIDEO_HEIGHT = 600;
+        const int VIDEO_WIDTH = 800;
+
+        uint8_t FONT_START_ADDRESS = 0xF;
 
         typedef void (Chip8::*funptr)();
-        funptr tab[100], tab0[100], tab8[100], tabE[100], tabF[100];
-
         void NOOP(){return;}
-        inline funptr get_tab0(){return tab0};
-        inline funptr get_tab8(){return tab8};
-        inline funptr get_tabE(){return tabE};
-        inline funptr get_tabF(){return tabF};
-        inline funptr tab[0xF+1]{this->&NOOP};
-        inline funptr tab0[0xE+1]{this->&NOOP};
-        inline funptr tab8[0xE+1]{this->&NOOP};
-        inline funptr tabE[0xE+1]{this->&NOOP};
-        inline funptr tabF[0x65+1]{this->&NOOP};
-
-        
+        funptr tab[0xF + 1]{&Chip8::NOOP};
+        funptr tab0[0xE + 1]{&Chip8::NOOP};
+        funptr tab8[0xE + 1]{&Chip8::NOOP};
+        funptr tabE[0xE + 1]{&Chip8::NOOP};
+        funptr tabF[0x65 + 1]{&Chip8::NOOP};
+        inline funptr get_tab0(){return *tab0;};
+        inline funptr get_tab8(){return *tab8;};
+        inline funptr get_tabE(){return *tabE;};
+        inline funptr get_tabF(){return *tabF;};
+        void table_0();
+        void table_E();
+        void table_8();
+        void table_F();
 
         /*each value is either set to 1 or 0*/
         uint32_t video[64 * 32]{};
@@ -70,15 +74,18 @@ class Chip8{
         void op_Bnnn();
         void op_Cxrr();
         void op_Dxyn();
-        void op_Ex9e();
-        void op_Exa1();
+        void op_ExA1();
+        void op_Ex9E();
         void op_Fx07();
-        void op_Fx0a();
+        void op_Fx0A();
         void op_Fx15();
         void op_Fx18();
-        void op_Fx1e();
+        void op_Fx1A();
+        void op_Fx1E();
         void op_Fx29();
         void op_Fx33();
         void op_Fx55();
         void op_Fx65();
+
+private: 
 };

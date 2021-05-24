@@ -136,7 +136,7 @@ void Chip8::op_8xy5(){
 void Chip8::op_8x06(){
     uint8_t _x = x();
 
-    registers[0xF] = registers[x] & 0x1u;
+    registers[0xF] = registers[_x] & 0x1u;
 
     registers[_x] >>= 1u;
 }
@@ -219,7 +219,7 @@ void Chip8::op_Dxyn(){
 }
 
 //input key based instructions
-void Chip8::op_Ex9e(){
+void Chip8::op_Ex9E(){
     auto key = registers[x()];
 
     if(keypad[key]){
@@ -227,7 +227,7 @@ void Chip8::op_Ex9e(){
     }
 }
 
-void Chip8::op_Exa1(){
+void Chip8::op_ExA1(){
     auto key = registers[x()];
 
     if(!keypad[key]){
@@ -240,7 +240,7 @@ void Chip8::op_Fx07(){
 }
 
 //wait for a key to be pressed
-void Chip8::op_Fx0a(){
+void Chip8::op_Fx0A(){
     for(uint8_t i = 0; i < 16; ++i){
         if(keypad[i]){
             registers[x()] = i;
@@ -259,7 +259,7 @@ void Chip8::op_Fx18(){
     sound_timer = registers[x()];
 }
 
-void Chip8::op_Fx1e(){
+void Chip8::op_Fx1E(){
     index += registers[x()];
 }
 
