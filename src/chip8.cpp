@@ -65,11 +65,36 @@ void Chip8::init_funtables(){
     tab[0xB] = &Chip8::op_Bnnn;
     tab[0xC] = &Chip8::op_Cxkk;
     tab[0xD] = &Chip8::op_Dxyn;
-
     //funs to other nested tables
     tab[0x0] = &Chip8::get_tab0;
     tab[0x8] = &Chip8::get_tab8;
     tab[0xE] = &Chip8::get_tabE;
     tab[0xF] = &Chip8::get_tabF;
 
+    tab0[0x0] = &Chip8::op_00E0;
+    tab0[0xE] = &Chip8::op_00EE;
+    tab8[0x0] = &Chip8::op_8xy0;
+    tab8[0x1] = &Chip8::op_8xy1;
+    tab8[0x2] = &Chip8::op_8xy2;
+    tab8[0x3] = &Chip8::op_8xy3;
+    tab8[0x4] = &Chip8::op_8xy4;
+    tab8[0x5] = &Chip8::op_8xy5;
+    tab8[0x6] = &Chip8::op_8xy6;
+    tab8[0x7] = &Chip8::op_8xy7;
+    tab8[0xE] = &Chip8::op_8xyE;
+    tabE[0x1] = &Chip8::op_ExA1;
+    tabE[0xE] = &Chip8::op_Ex9E;
+    tabF[0x07] = &Chip8::op_Fx07;
+    tabF[0x0A] = &Chip8::op_Fx0A;
+    tabF[0x15] = &Chip8::op_Fx15;
+    tabF[0x18] = &Chip8::op_Fx18;
+    tabF[0x1E] = &Chip8::op_Fx1E;
+    tabF[0x29] = &Chip8::op_Fx29;
+    tabF[0x33] = &Chip8::op_Fx33;
+    tabF[0x55] = &Chip8::op_Fx55;
+    tabF[0x65] = &Chip8::op_Fx65;
 }
+void table_0(){(this->*(tab0[opcode & 0x000Fu]))();}
+void table_8(){(this->*(tab8[opcode & 0x000Fu]))();}
+void table_E(){(this->*(tabE[opcode & 0x000Fu]))();}
+void table_F(){(this->*(tabF[opcode & 0x00FFu]))();}

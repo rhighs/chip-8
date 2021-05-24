@@ -22,8 +22,20 @@ class Chip8{
         void init_funtables();
 
         typedef void (Chip8::*funptr)();
+        funptr tab[100], tab0[100], tab8[100], tabE[100], tabF[100];
 
-        funptr tab[100];
+        void NOOP(){return;}
+        inline funptr get_tab0(){return tab0};
+        inline funptr get_tab8(){return tab8};
+        inline funptr get_tabE(){return tabE};
+        inline funptr get_tabF(){return tabF};
+        inline funptr tab[0xF+1]{this->&NOOP};
+        inline funptr tab0[0xE+1]{this->&NOOP};
+        inline funptr tab8[0xE+1]{this->&NOOP};
+        inline funptr tabE[0xE+1]{this->&NOOP};
+        inline funptr tabF[0x65+1]{this->&NOOP};
+
+        
 
         /*each value is either set to 1 or 0*/
         uint32_t video[64 * 32]{};
