@@ -50,6 +50,7 @@ public:
         uint8_t rightmost_byte();
         uint8_t x();
         uint8_t y();
+        uint8_t negate(uint8_t byte);
 
         void op_00E0();
         void op_00EE();

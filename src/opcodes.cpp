@@ -4,6 +4,12 @@ uint8_t Chip8::rightmost_byte(){
     return (opcode & 0x00FFu); 
 }
 
+uint8_t Chip8::negate(uint8_t byte)
+{
+    int fneg = 1;
+    return ( byte ^ -fneg ) + fneg;
+}
+
 uint8_t Chip8::x(){
     return (opcode & 0x0F00u) >> 8u;
 }
