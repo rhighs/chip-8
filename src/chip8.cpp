@@ -3,9 +3,7 @@
 
 const unsigned int START_ADDR = 0x200;
 const unsigned int FONTSET_SIZE = 80;
-
 const unsigned int FONTSET_START_ADDR = 0x50;
-
 uint8_t fontset[FONTSET_SIZE] =
 {
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -28,23 +26,17 @@ uint8_t fontset[FONTSET_SIZE] =
 
 Chip8::Chip8() : rand_gen(std::chrono::system_clock::now().time_since_epoch().count()){
     pc = START_ADDR;
-
     for(uint32_t i = 0; i < FONTSET_SIZE; ++i)
         memory[FONTSET_START_ADDR + i] = fontset[i];
-
     rand_byte = std::uniform_int_distribution<uint8_t>(0, 255u);
-
     init_funtables();
 }
 
 void Chip8::load_rom(char const* filename){
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
-
     if(!file.is_open()) return;
-
     std::streampos size = file.tellg();
     char* buffer = (char *)&(memory[START_ADDR + 1]);
-
     //reads and saves to buffer
     file.seekg(0, std::ios::beg);
     file.read(buffer, size);
@@ -101,3 +93,4 @@ void Chip8::table_0(){(this->*(tab0[opcode & 0x000Fu]))();}
 void Chip8::table_8(){(this->*(tab8[opcode & 0x000Fu]))();}
 void Chip8::table_E(){(this->*(tabE[opcode & 0x000Fu]))();}
 void Chip8::table_F(){(this->*(tabF[opcode & 0x00FFu]))();}
+
