@@ -1,6 +1,7 @@
 #include "../include/chip8.hpp"
 #include <fstream>
 
+using namespace sku;
 const unsigned int START_ADDR = 0x200;
 const unsigned int FONTSET_SIZE = 80;
 const unsigned int FONTSET_START_ADDR = 0x50;
@@ -40,6 +41,14 @@ void Chip8::load_rom(char const* filename){
     //reads and saves to buffer
     file.seekg(0, std::ios::beg);
     file.read(buffer, size);
+}
+
+void Chip8::cycle() {
+    opcode = (memory[pc] << 8u) | memory[pc + 1];
+    pc += 2;
+    ((*this).*(table[(opcode & 0xF000u) >> 12u]))();
+    if(delay_timer) --delay_timer;
+    if(sound_timer) --sound_timer;
 }
 
 void Chip8::init_funtables(){
