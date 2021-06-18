@@ -91,6 +91,6 @@ namespace sku {
             void op_Fx65();
 
         private: 
-    }
+    };
 }
 
