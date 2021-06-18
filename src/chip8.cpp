@@ -1,4 +1,4 @@
-#include "../include/chip8.hpp"
+#include "chip8.hpp"
 #include <fstream>
 
 using namespace sku;
