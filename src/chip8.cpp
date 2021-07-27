@@ -46,7 +46,7 @@ void Chip8::load_rom(char const* filename){
 void Chip8::cycle() {
     opcode = (memory[pc] << 8u) | memory[pc + 1];
     pc += 2;
-    ((*this).*(table[(opcode & 0xF000u) >> 12u]))();
+    ((*this).*(tab[(opcode & 0xF000u) >> 12u]))();
     if(delay_timer) --delay_timer;
     if(sound_timer) --sound_timer;
 }

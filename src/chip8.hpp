@@ -15,6 +15,7 @@ namespace sku {
             uint8_t FONT_START_ADDRESS = 0xF;
 
             Chip8();
+            void cycle();
             uint8_t sp{};
             uint8_t keypad[16]{};
             uint8_t delay_timer{};
