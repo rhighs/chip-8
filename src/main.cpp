@@ -10,20 +10,24 @@ int main(int argc, char** argv)
 	if (argc != 4)
 	{
 		std::cerr << "Usage: " << argv[0] << " <Scale> <Delay> <ROM>\n";
-		std::exit(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	}
 
 	int videoScale = std::stoi(argv[1]);
 	int cycleDelay = std::stoi(argv[2]);
 	char const* romFilename = argv[3];
 
-
 	Chip8 chip8;
-    Video platform("CHIP-8 Emulator", chip8.VIDEO_WIDTH * videoScale, chip8.VIDEO_HEIGHT * videoScale, chip8.VIDEO_WIDTH, chip8.VIDEO_HEIGHT);
+    Video platform(
+            "CHIP-8 Emulator",
+            chip8.VIDEO_WIDTH * videoScale,
+            chip8.VIDEO_HEIGHT * videoScale,
+            chip8.VIDEO_WIDTH,
+            chip8.VIDEO_HEIGHT
+            );
 	chip8.load_rom(romFilename);
 
 	int videoPitch = sizeof(chip8.video[0]) * chip8.VIDEO_WIDTH;
-
 	auto lastCycleTime = std::chrono::high_resolution_clock::now();
 	bool quit = false;
 
